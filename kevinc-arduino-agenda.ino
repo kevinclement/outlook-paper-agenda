@@ -64,9 +64,7 @@ void setup() {
 
     http.addHeader("Action", "FindItem");
     
-    String payload_body = "{\"__type\":\"FindItemJsonRequest:#Exchange\",\"Header\":{\"__type\":\"JsonRequestHeaders:#Exchange\",\"RequestServerVersion\":\"Exchange2013\",\"TimeZoneContext\":{\"__type\":\"TimeZoneContext:#Exchange\",\"TimeZoneDefinition\":{\"__type\":\"TimeZoneDefinitionType:#Exchange\",\"Id\":\"Pacific Standard Time\"}}},\"Body\":{\"__type\":\"FindItemRequest:#Exchange\",\"ItemShape\":{\"__type\":\"ItemResponseShape:#Exchange\",\"BaseShape\":\"IdOnly\",\"AdditionalProperties\":[{\"__type\":\"PropertyUri:#Exchange\",\"FieldURI\":\"ItemParentId\"},{\"__type\":\"PropertyUri:#Exchange\",\"FieldURI\":\"Sensitivity\"},{\"__type\":\"PropertyUri:#Exchange\",\"FieldURI\":\"AppointmentState\"},{\"__type\":\"PropertyUri:#Exchange\",\"FieldURI\":\"IsCancelled\"},{\"__type\":\"PropertyUri:#Exchange\",\"FieldURI\":\"HasAttachments\"},{\"__type\":\"PropertyUri:#Exchange\",\"FieldURI\":\"LegacyFreeBusyStatus\"},{\"__type\":\"PropertyUri:#Exchange\",\"FieldURI\":\"CalendarItemType\"},{\"__type\":\"PropertyUri:#Exchange\",\"FieldURI\":\"Start\"},{\"__type\":\"PropertyUri:#Exchange\",\"FieldURI\":\"End\"},{\"__type\":\"PropertyUri:#Exchange\",\"FieldURI\":\"IsAllDayEvent\"},{\"__type\":\"PropertyUri:#Exchange\",\"FieldURI\":\"Organizer\"},{\"__type\":\"PropertyUri:#Exchange\",\"FieldURI\":\"Subject\"},{\"__type\":\"PropertyUri:#Exchange\",\"FieldURI\":\"IsMeeting\"},{\"__type\":\"PropertyUri:#Exchange\",\"FieldURI\":\"UID\"},{\"__type\":\"PropertyUri:#Exchange\",\"FieldURI\":\"InstanceKey\"},{\"__type\":\"PropertyUri:#Exchange\",\"FieldURI\":\"ItemEffectiveRights\"},{\"__type\":\"PropertyUri:#Exchange\",\"FieldURI\":\"JoinOnlineMeetingUrl\"},{\"__type\":\"PropertyUri:#Exchange\",\"FieldURI\":\"ConversationId\"},{\"__type\":\"PropertyUri:#Exchange\",\"FieldURI\":\"CalendarIsResponseRequested\"},{\"__type\":\"PropertyUri:#Exchange\",\"FieldURI\":\"Categories\"},{\"__type\":\"PropertyUri:#Exchange\",\"FieldURI\":\"IsRecurring\"},{\"__type\":\"PropertyUri:#Exchange\",\"FieldURI\":\"IsOrganizer\"},{\"__type\":\"PropertyUri:#Exchange\",\"FieldURI\":\"EnhancedLocation\"},{\"__type\":\"PropertyUri:#Exchange\",\"FieldURI\":\"IsSeriesCancelled\"}]},\"ParentFolderIds\":[{\"__type\":\"FolderId:#Exchange\",\"Id\":\"AAMkAGY0YWZkZmM5LThkMzAtNGUyYi04YTU4LWIwNzQwMDkwODg4ZAAuAAAAAAAinpXKstMcRIsDKoPjzoxSAQDYeirqiu/aQrXjfEsmxranAAAAj87EAAA=\",\"ChangeKey\":\"AgAAAA==\"}],\"Traversal\":\"Shallow\",\"Paging\":{\"__type\":\"CalendarPageView:#Exchange\",\"StartDate\":\"2019-06-30T00:00:00.001\",\"EndDate\":\"2019-08-04T00:00:00.000\"}}}";
-    
-    int httpCode = http.POST(payload_body); 
+    int httpCode = http.POST(getBody(7,23,2019)); 
  
     if (httpCode > 0) { //Check for the returning code        
         int len = http.getSize();
@@ -111,27 +109,13 @@ void setup() {
 }
  
 void loop() {
- 
-//  if ((WiFi.status() == WL_CONNECTED)) { //Check the current connection status
-// 
-//    HTTPClient http;
-// 
-//    http.begin("https://outlook-sdf.office.com/", root_ca);
-//    int httpCode = http.GET();
-// 
-//    if (httpCode > 0) { //Check for the returning code
-// 
-//        String payload = http.getString();
-//        Serial.println(httpCode);
-//        Serial.println(payload);
-//      }
-// 
-//    else {
-//      Serial.println("Error on HTTP request");
-//    }
-// 
-//    http.end(); //Free the resources
-//  }
-// 
-//  delay(10000);
+}
+
+String getBody(int month, int day, int year) {
+  String body = "{\"__type\":\"FindItemJsonRequest:#Exchange\",\"Header\":{\"__type\":\"JsonRequestHeaders:#Exchange\",\"RequestServerVersion\":\"Exchange2013\",\"TimeZoneContext\":{\"__type\":\"TimeZoneContext:#Exchange\",\"TimeZoneDefinition\":{\"__type\":\"TimeZoneDefinitionType:#Exchange\",\"Id\":\"Pacific Standard Time\"}}},\"Body\":{\"__type\":\"FindItemRequest:#Exchange\",\"ItemShape\":{\"__type\":\"ItemResponseShape:#Exchange\",\"BaseShape\":\"IdOnly\",\"AdditionalProperties\":[{\"__type\":\"PropertyUri:#Exchange\",\"FieldURI\":\"ItemParentId\"},{\"__type\":\"PropertyUri:#Exchange\",\"FieldURI\":\"Sensitivity\"},{\"__type\":\"PropertyUri:#Exchange\",\"FieldURI\":\"AppointmentState\"},{\"__type\":\"PropertyUri:#Exchange\",\"FieldURI\":\"IsCancelled\"},{\"__type\":\"PropertyUri:#Exchange\",\"FieldURI\":\"HasAttachments\"},{\"__type\":\"PropertyUri:#Exchange\",\"FieldURI\":\"LegacyFreeBusyStatus\"},{\"__type\":\"PropertyUri:#Exchange\",\"FieldURI\":\"CalendarItemType\"},{\"__type\":\"PropertyUri:#Exchange\",\"FieldURI\":\"Start\"},{\"__type\":\"PropertyUri:#Exchange\",\"FieldURI\":\"End\"},{\"__type\":\"PropertyUri:#Exchange\",\"FieldURI\":\"IsAllDayEvent\"},{\"__type\":\"PropertyUri:#Exchange\",\"FieldURI\":\"Organizer\"},{\"__type\":\"PropertyUri:#Exchange\",\"FieldURI\":\"Subject\"},{\"__type\":\"PropertyUri:#Exchange\",\"FieldURI\":\"IsMeeting\"},{\"__type\":\"PropertyUri:#Exchange\",\"FieldURI\":\"UID\"},{\"__type\":\"PropertyUri:#Exchange\",\"FieldURI\":\"InstanceKey\"},{\"__type\":\"PropertyUri:#Exchange\",\"FieldURI\":\"ItemEffectiveRights\"},{\"__type\":\"PropertyUri:#Exchange\",\"FieldURI\":\"JoinOnlineMeetingUrl\"},{\"__type\":\"PropertyUri:#Exchange\",\"FieldURI\":\"ConversationId\"},{\"__type\":\"PropertyUri:#Exchange\",\"FieldURI\":\"CalendarIsResponseRequested\"},{\"__type\":\"PropertyUri:#Exchange\",\"FieldURI\":\"Categories\"},{\"__type\":\"PropertyUri:#Exchange\",\"FieldURI\":\"IsRecurring\"},{\"__type\":\"PropertyUri:#Exchange\",\"FieldURI\":\"IsOrganizer\"},{\"__type\":\"PropertyUri:#Exchange\",\"FieldURI\":\"EnhancedLocation\"},{\"__type\":\"PropertyUri:#Exchange\",\"FieldURI\":\"IsSeriesCancelled\"}]},\"ParentFolderIds\":[{\"__type\":\"FolderId:#Exchange\",\"Id\":\"AAMkAGY0YWZkZmM5LThkMzAtNGUyYi04YTU4LWIwNzQwMDkwODg4ZAAuAAAAAAAinpXKstMcRIsDKoPjzoxSAQDYeirqiu/aQrXjfEsmxranAAAAj87EAAA=\",\"ChangeKey\":\"AgAAAA==\"}],\"Traversal\":\"Shallow\",\"Paging\":{\"__type\":\"CalendarPageView:#Exchange\",";
+
+  body += "\"StartDate\":\"" + String(year) + "-" + String(month) + "-" + String(day) + "T00:00:00.001\",";
+  body += "\"EndDate\":\"" + String(year) + "-" + String(month) + "-" + String(day+1) + "T00:00:00.001\",";
+   
+  return body + "}}}";  
 }
