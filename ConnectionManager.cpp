@@ -55,7 +55,9 @@ void ConnectionManager::connectToWifi() {
   }
  
   Serial.println("Connected to the WiFi network");
+}
 
+CalendarItem* ConnectionManager::getItems() {
   if ((WiFi.status() == WL_CONNECTED)) { //Check the current connection status
  
     HTTPClient http;
@@ -65,7 +67,8 @@ void ConnectionManager::connectToWifi() {
     http.begin(url, root_ca);
 
     http.addHeader("Action", "FindItem");
-    
+
+    Serial.printf("Getting items from mailbox...");
     int httpCode = http.POST(getBody(7,23,2019)); 
  
     if (httpCode > 0) {
@@ -77,7 +80,6 @@ void ConnectionManager::connectToWifi() {
         uint8_t buff[128] = { 0 };
         WiFiClient * stream = http.getStreamPtr();
 
-        Serial.printf("Starting parse with heap size: %d\n", String(ESP.getFreeHeap()));
         parser.setListener(&listener);
 
         while(http.connected() && (len > 0 || len == -1)) {
@@ -85,10 +87,9 @@ void ConnectionManager::connectToWifi() {
           size_t size = stream->available();
 
           if(size) {
-            // read up to 128 byte
             int c = stream->readBytes(buff, ((size > sizeof(buff)) ? sizeof(buff) : size));
-            for(int jj = 0; jj<c; jj++) {
-              parser.parse(buff[jj]); 
+            for(int i = 0; i<c; i++) {
+              parser.parse(buff[i]); 
             }
 
             if(len > 0) {
@@ -98,30 +99,18 @@ void ConnectionManager::connectToWifi() {
           delay(1);
         }
 
-        Serial.printf("Finished parse with heap size: %d\n", String(ESP.getFreeHeap()));
-        
-        CalendarItem* items = listener.getItems();
-        for (int i=0; i<listener.getTotalItemCount(); i++) {
-          CalendarItem item = items[i];
-          Serial.print("item: " + item.Subject + " loc: " + item.Location);
-          Serial.println();
-        }
-
-//        Serial.print("First item: " + items[1].Subject + " loc: " + items[0].Location);
-//        Serial.println();
-
+        return listener.getItems();
       } 
     else {
-      Serial.println("Error on HTTP request");
-      Serial.printf("[HTTPS] GET... failed, error: %s\n", http.errorToString(httpCode).c_str());
+      Serial.printf("GET... failed, error: %s\n", http.errorToString(httpCode).c_str());
     }
  
     http.end(); //Free the resources
   }
 }
 
-CalendarItem* ConnectionManager::getItems() {
-  
+int ConnectionManager::getTotalItemCount() {
+  return listener.getTotalItemCount();
 }
 
 String ConnectionManager::getBody(int month, int day, int year) {

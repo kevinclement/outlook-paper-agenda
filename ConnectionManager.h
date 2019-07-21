@@ -9,6 +9,7 @@ class ConnectionManager {
 
     void connectToWifi();
     CalendarItem* getItems();
+    int getTotalItemCount();
     
   private:
     String getBody(int, int, int);
