@@ -21,10 +21,7 @@ void AgendaParser::key(String key) {
 
 void AgendaParser::value(String value) {
   if (currentKey == "Subject") {
-    items[++currentIndex] = CalendarItem();
     items[currentIndex].Subject = value;
-
-    total_items++;
   }
   else if (currentKey == "DisplayName") {
     items[currentIndex].Location = value;
@@ -33,7 +30,9 @@ void AgendaParser::value(String value) {
     items[currentIndex].FreeBusy = value;
   }
   else if (currentKey == "Start") {
+    items[++currentIndex] = CalendarItem();
     items[currentIndex].Start = value;
+    total_items++;
   }
   else if (currentKey == "End") {
     items[currentIndex].End = value;
