@@ -1,51 +1,50 @@
 #include "AgendaParser.h"
 #include "JsonListener.h"
+#include "CalendarItem.h"
 
-bool nextValue = false;
+String currentKey = "";
+CalendarItem items[50]; // TODO: malloc (i sux at c++)
+int total_items = 0;
+int currentIndex = -1;
 
-void ExampleListener::whitespace(char c) {
-  //Serial.println("whitespace");
+
+// Stuff I care about
+//   Subject
+//   FreeBusyType {Tentative, Free, Busy}
+//   Start: "2019-07-22T11:30:00-07:00",
+//   End: "2019-07-22T12:00:00-07:00",
+//   Location\DisplayName: "Conf Room 32/31 (8)"
+
+void AgendaParser::key(String key) {
+  currentKey = key;
 }
 
-void ExampleListener::startDocument() {
-  //Serial.println("start document");
-}
+void AgendaParser::value(String value) {
+  if (currentKey == "Subject") {
+    items[++currentIndex] = CalendarItem();
+    items[currentIndex].Subject = value;
 
-void ExampleListener::key(String key) {
-  //Serial.println("key: " + key);
-  if (key == "Subject") 
-  {
-    nextValue = true;
-  } else {
-    nextValue = false;
+    total_items++;
   }
-  
-}
-
-void ExampleListener::value(String value) {
-  if (nextValue) {
-    Serial.println("subject: " + value);
+  else if (currentKey == "DisplayName") {
+    Serial.println("found: " + value);
+    items[currentIndex].Location = value;
   }
-  
-  //Serial.println("value: " + value);
 }
 
-void ExampleListener::endArray() {
-  //Serial.println("end array. ");
+CalendarItem* AgendaParser::getItems() {
+  return items;
 }
 
-void ExampleListener::endObject() {
-  //Serial.println("end object. ");
+int AgendaParser::getTotalItemCount() {
+  return total_items;
 }
 
-void ExampleListener::endDocument() {
-  //Serial.println("end document. ");
-}
 
-void ExampleListener::startArray() {
-   //Serial.println("start array. ");
-}
-
-void ExampleListener::startObject() {
-   //Serial.println("start object. ");
-}
+void AgendaParser::endArray() {}
+void AgendaParser::endObject() {}
+void AgendaParser::endDocument() {}
+void AgendaParser::startArray() {}
+void AgendaParser::startObject() {}
+void AgendaParser::whitespace(char c) {}
+void AgendaParser::startDocument() {}

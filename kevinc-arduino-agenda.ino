@@ -3,12 +3,15 @@
 #include "JsonStreamingParser.h"
 #include "JsonListener.h"
 #include "AgendaParser.h"
+#include "CalendarItem.h"
 
 JsonStreamingParser parser;
-ExampleListener listener;
+AgendaParser listener;
 
 const char* ssid = "Kevin";
 const char* password =  "henry123";
+
+const char* url = "https://outlook.office365.com/owa/calendar/f4afdfc98d304e2b8a58b0740090888d@microsoft.com/42c618b2217d434688e749ff0cf238c115819208843645457799/service.svc";
 
  // openssl s_client -connect outlook-sdf.office.com:443 -showcerts
 const char* root_ca= \
@@ -60,13 +63,13 @@ void setup() {
     http.setConnectTimeout(60000);
     http.setTimeout(60000);
  
-    http.begin("https://outlook.office365.com/owa/calendar/f4afdfc98d304e2b8a58b0740090888d@microsoft.com/42c618b2217d434688e749ff0cf238c115819208843645457799/service.svc", root_ca);
+    http.begin(url, root_ca);
 
     http.addHeader("Action", "FindItem");
     
     int httpCode = http.POST(getBody(7,23,2019)); 
  
-    if (httpCode > 0) { //Check for the returning code        
+    if (httpCode > 0) {
         int len = http.getSize();
         Serial.printf("SUCCESS!\n");
         Serial.printf("  code: %d\n", httpCode);
@@ -97,8 +100,18 @@ void setup() {
         }
 
         Serial.printf("Finished parse with heap size: %d\n", String(ESP.getFreeHeap()));
-      }
- 
+        
+        CalendarItem* items = listener.getItems();
+        for (int i=0; i<listener.getTotalItemCount(); i++) {
+          CalendarItem item = items[i];
+          Serial.print("item: " + item.Subject + " loc: " + item.Location);
+          Serial.println();
+        }
+
+//        Serial.print("First item: " + items[1].Subject + " loc: " + items[0].Location);
+//        Serial.println();
+
+      } 
     else {
       Serial.println("Error on HTTP request");
       Serial.printf("[HTTPS] GET... failed, error: %s\n", http.errorToString(httpCode).c_str());
