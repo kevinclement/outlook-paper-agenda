@@ -8,7 +8,7 @@ void setup() {
 
   manager.connectToWifi();
 
-  CalendarItem* items = manager.getItems();
+  CalendarItem* items = manager.getItems(7, 23, 2019);
   for (int i=0; i<manager.getTotalItemCount(); i++) {
     CalendarItem item = items[i];
     Serial.print("item: " + item.Subject + " loc: " + item.Location);

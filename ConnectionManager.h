@@ -8,7 +8,7 @@ class ConnectionManager {
     ConnectionManager();
 
     void connectToWifi();
-    CalendarItem* getItems();
+    CalendarItem* getItems(int, int, int);
     int getTotalItemCount();
     
   private:

@@ -57,7 +57,7 @@ void ConnectionManager::connectToWifi() {
   Serial.println("Connected to the WiFi network");
 }
 
-CalendarItem* ConnectionManager::getItems() {
+CalendarItem* ConnectionManager::getItems(int month, int day, int year) {
   if ((WiFi.status() == WL_CONNECTED)) { //Check the current connection status
  
     HTTPClient http;
@@ -69,7 +69,7 @@ CalendarItem* ConnectionManager::getItems() {
     http.addHeader("Action", "FindItem");
 
     Serial.printf("Getting items from mailbox...");
-    int httpCode = http.POST(getBody(7,23,2019)); 
+    int httpCode = http.POST(getBody(month, day, year)); 
  
     if (httpCode > 0) {
         int len = http.getSize();
