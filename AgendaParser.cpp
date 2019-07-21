@@ -27,8 +27,16 @@ void AgendaParser::value(String value) {
     total_items++;
   }
   else if (currentKey == "DisplayName") {
-    Serial.println("found: " + value);
     items[currentIndex].Location = value;
+  }
+  else if (currentKey == "FreeBusyType") {
+    items[currentIndex].FreeBusy = value;
+  }
+  else if (currentKey == "Start") {
+    items[currentIndex].Start = value;
+  }
+  else if (currentKey == "End") {
+    items[currentIndex].End = value;
   }
 }
 
