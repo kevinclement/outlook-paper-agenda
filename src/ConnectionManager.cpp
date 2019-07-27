@@ -8,8 +8,8 @@
 JsonStreamingParser parser;
 AgendaParser listener;
 
-const char* ssid = "Kevin";
-const char* password =  "henry123";
+const char* ssid = "clement";
+const char* password =  "4258025345";
 
 const char* url = "https://outlook.office365.com/owa/calendar/f4afdfc98d304e2b8a58b0740090888d@microsoft.com/42c618b2217d434688e749ff0cf238c115819208843645457799/service.svc";
 
