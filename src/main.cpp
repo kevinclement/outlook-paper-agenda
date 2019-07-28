@@ -4,14 +4,17 @@
 #include "ConnectionManager.h"
 #include "Utils.h"
 
-
 #define uS_TO_S_FACTOR 1000000
 // TODO: switch to 15 minutes (900)
 #define TIME_TO_SLEEP  30        /* Time ESP32 will go to sleep (in seconds) */
 
+RTC_DATA_ATTR int bootCount = 0;
+
 void setup() {
   Serial.begin(115200);
   Serial.printf("Outlook ePaper Agenda by kevinc...\n");
+
+  ++bootCount;
 
   pinMode(LED_BUILTIN, OUTPUT);
   blink(1);
@@ -35,7 +38,11 @@ void setup() {
 
   // blink to know i'm done
   blink(2);
-  display.showItems();
+  display.showItems(bootCount <= 1);
+  delay(2000);
+  display.showItems(false);
+  delay(2000);
+  display.showItems(false);
 
   // setup deep sleep and sleep the device
   // esp_sleep_enable_timer_wakeup(TIME_TO_SLEEP * uS_TO_S_FACTOR);
