@@ -1,4 +1,5 @@
 #include <WiFi.h>
+#include <WiFiMulti.h>
 #include <HTTPClient.h>
 #include "JsonStreamingParser.h"
 #include "JsonListener.h"
@@ -7,9 +8,7 @@
 
 JsonStreamingParser parser;
 AgendaParser listener;
-
-const char* ssid = "clement";
-const char* password =  "4258025345";
+WiFiMulti wifiMulti;
 
 const char* url = "https://outlook.office365.com/owa/calendar/f4afdfc98d304e2b8a58b0740090888d@microsoft.com/42c618b2217d434688e749ff0cf238c115819208843645457799/service.svc";
 
@@ -43,18 +42,18 @@ const char* root_ca= \
 "J4XVpOqw4qXcBiklkOjOLOnp0Hzvzg==\n" \
 "-----END CERTIFICATE-----\n";
 
-ConnectionManager::ConnectionManager() {  
+ConnectionManager::ConnectionManager() {
+  wifiMulti.addAP("clement", "4258025345");
+  wifiMulti.addAP("Kevin", "henry123");
+  wifiMulti.addAP("MSFTOPEN", "");
 }
 
 void ConnectionManager::connectToWifi() {
-  WiFi.begin(ssid, password); 
- 
-  while (WiFi.status() != WL_CONNECTED) {
-    delay(1000);
-    Serial.println("Connecting to WiFi..");
+  Serial.println("Connecting Wifi...");
+
+  if(wifiMulti.run() == WL_CONNECTED) {
+    Serial.println("Connected to the WiFi network");
   }
- 
-  Serial.println("Connected to the WiFi network");
 }
 
 CalendarItem* ConnectionManager::getItems(int month, int day, int year) {
