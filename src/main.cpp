@@ -2,19 +2,12 @@
 #include "Display.h"
 #include "CalendarItem.h"
 #include "ConnectionManager.h"
+#include "Utils.h"
+
 
 #define uS_TO_S_FACTOR 1000000
 // TODO: switch to 15 minutes (900)
 #define TIME_TO_SLEEP  30        /* Time ESP32 will go to sleep (in seconds) */
-
-void blink(int count) {
-  for(int i=0; i<count; i++) {
-    digitalWrite(LED_BUILTIN, HIGH);
-    delay(300);
-    digitalWrite(LED_BUILTIN, LOW);
-    delay(300);
-  }
-}
 
 void setup() {
   Serial.begin(115200);
@@ -26,27 +19,27 @@ void setup() {
   Display display = Display();
   display.init();
 
-  ConnectionManager manager = ConnectionManager();
-  manager.connectToWifi();
+  // ConnectionManager manager = ConnectionManager();
+  // manager.connectToWifi();
 
-  CalendarItem* items = manager.getItems(7, 23, 2019);
-  for (int i=0; i<manager.getTotalItemCount(); i++) {
-    CalendarItem item = items[i];
-    Serial.println(item.Subject);
-    Serial.println("  LOC:   " + item.Location);
-    Serial.println("  FB:    " + item.FreeBusy);
-    Serial.println("  Start: " + item.Start);
-    Serial.println("  End:   " + item.End);
-    Serial.println();
-  }
+  // CalendarItem* items = manager.getItems(7, 23, 2019);
+  // for (int i=0; i<manager.getTotalItemCount(); i++) {
+  //   CalendarItem item = items[i];
+  //   Serial.println(item.Subject);
+  //   Serial.println("  LOC:   " + item.Location);
+  //   Serial.println("  FB:    " + item.FreeBusy);
+  //   Serial.println("  Start: " + item.Start);
+  //   Serial.println("  End:   " + item.End);
+  //   Serial.println();
+  // }
 
   // blink to know i'm done
   blink(2);
   display.showItems();
 
   // setup deep sleep and sleep the device
-  esp_sleep_enable_timer_wakeup(TIME_TO_SLEEP * uS_TO_S_FACTOR);
-  esp_deep_sleep_start();
+  // esp_sleep_enable_timer_wakeup(TIME_TO_SLEEP * uS_TO_S_FACTOR);
+  // esp_deep_sleep_start();
 }
 
 void loop() {
