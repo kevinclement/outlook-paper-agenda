@@ -20,7 +20,7 @@ void Display::init() {
 const char HelloWorld[] = "Hello World!";
 void helloFullScreenPartialMode(int count)
 {
-    String text = HelloWorld + ' ' + count;
+    String text = HelloWorld;
   //Serial.println("helloFullScreenPartialMode");
   const char fullscreen[] = "full screen update";
   const char fpm[] = "fast partial mode";
@@ -75,7 +75,6 @@ void helloFullScreenPartialMode(int count)
   //Serial.println("helloFullScreenPartialMode done");
 }
 
-int count = 0;
 void printHeader(String day) {
     display.firstPage();
 
@@ -100,8 +99,32 @@ void printHeader(String day) {
     } while (display.nextPage());
 }
 
-void printItems() {
+void printRow(int y, String title, String start_time, String end_time, String room) {
+  const unsigned int second_row_offset = 20;
+  do
+  {
+    display.setCursor(5, y);
+    display.setFont(&segoeuib7pt7b);
+    display.print(start_time);
+    display.setCursor(70, y);
+    display.print(title);
+    display.setFont(&segoeui6pt7b);
+    display.setCursor(5, y + second_row_offset);
+    display.print(end_time);
+    display.setCursor(70, y + second_row_offset);
+    display.print(room);
     
+    // display.drawFastVLine(65, 4, 40, GxEPD_BLACK);
+    // display.drawFastHLine(0, 55, 300, GxEPD_BLACK);
+    // display.drawFastVLine(65, 64, 40, GxEPD_BLACK);
+  }
+  while (display.nextPage());
+}
+void printItems() {
+  display.setTextColor(GxEPD_BLACK);
+  
+  printRow(55, "Black Hat Content Development", "9:00 AM", "10:00 AM", "Conf Room 32/25");
+  printRow(100, "OWA + WAC Sync", "1:00 PM", "2:00 PM", "32/3N");
 }
 
 void Display::showItems(bool clear, String day) {
@@ -122,42 +145,8 @@ void Display::showItems(bool clear, String day) {
     } while (display.nextPage());
   }
 
-  display.setTextColor(GxEPD_BLACK);
-
   printHeader(day);
   printItems();
-
-  count++;
-
-//   do
-//   {
-//     display.setCursor(5, 18);   
-//     display.setFont(&segoeuib7pt7b);
-//     display.print("9:00 AM");
-//     display.setCursor(70, 18);
-//     display.print("Black Hat Content Development");
-//     display.setFont(&segoeui6pt7b);
-//     display.setCursor(5, 38);
-//     display.print("10:00 AM");
-//     display.setCursor(70, 38);    
-//     display.print("Conf Room 32/25");
-
-//     display.drawFastVLine(65, 4, 40, GxEPD_BLACK);
-//     display.drawFastHLine(0, 55, 300, GxEPD_BLACK);
-
-//     display.drawFastVLine(65, 64, 40, GxEPD_BLACK);
-//     display.setCursor(5, 80);
-//     display.setFont(&segoeuib7pt7b);
-//     display.print("1:00 PM");
-//     display.setCursor(70, 80);
-//     display.print("OWA + WAC Sync");
-//     display.setFont(&segoeui6pt7b);
-//     display.setCursor(5, 100);
-//     display.print("2:00 PM");
-//     display.setCursor(70, 100);
-//     display.print("32/3N");
-//   }
-//   while (display.nextPage());
 
   // turn it off now
   display.powerOff();
