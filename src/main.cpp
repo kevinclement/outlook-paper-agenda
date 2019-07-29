@@ -28,7 +28,7 @@ void setup() {
   
   char buf[80];
   strftime(buf, sizeof(buf), "%A, %B %d", &ts);
-  String asString(buf);
+  String dayStr(buf);
 
   // TMP
   printf("2: %s\n", buf);
@@ -47,7 +47,7 @@ void setup() {
 
   // blink to know i'm done
   blink(2);
-  //display.showItems(bootCount <= 1, "Monday, July 29");
+  display.showItems(bootCount <= 1, dayStr);
   // delay(2000);
   // display.showItems(false);
   // delay(2000);
