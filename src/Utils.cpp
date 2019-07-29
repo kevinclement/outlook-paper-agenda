@@ -57,3 +57,19 @@ double diffTime(String str1, String str2) {
 
     return difftime(t2, t1);
 }
+
+// its late i know
+String formatHour(String str1) {
+  String fm = "";
+  char buf[80];
+  struct tm tm;
+  strptime(str1.c_str(), "%Y-%m-%dT%H:%M:%S", &tm);
+
+  int hour = tm.tm_hour > 12 ? tm.tm_hour - 12 : tm.tm_hour;
+  fm += String(hour) + ":";
+
+  strftime(buf, sizeof(buf), "%M %p", &tm);
+
+  fm += String(buf);
+  return fm;
+}

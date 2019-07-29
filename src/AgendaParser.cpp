@@ -33,6 +33,8 @@ void AgendaParser::value(String value) {
   else if (currentKey == "Start") {
     items[++currentIndex] = CalendarItem();
     items[currentIndex].Start = value;
+    items[currentIndex].StartFormatted = formatHour(value);
+
     total_items++;
   }
   else if (currentKey == "End") {

@@ -15,6 +15,11 @@ void setup() {
   Serial.printf("Outlook ePaper Agenda by kevinc...\n");
 
   ++bootCount;
+  
+  // String fh = formatHour(String("2019-07-29T12:10:00-07:00"));
+  // Serial.print("hour is: ");
+  // Serial.println(fh);
+  // return;
 
   pinMode(LED_BUILTIN, OUTPUT);
   blink(1);
@@ -42,6 +47,7 @@ void setup() {
     Serial.println("  FB:      " + item.FreeBusy);
     Serial.println("  Start:   " + item.Start);
     Serial.println("  End:     " + item.End);
+    Serial.println("  Start F: " + item.StartFormatted);
     Serial.println("  Runtime: " + item.Runtime);
 
     Serial.println();

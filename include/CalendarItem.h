@@ -9,6 +9,7 @@ class CalendarItem {
     String Subject;
     String FreeBusy;
     String Start;
+    String StartFormatted;
     String End;
     String Location;
     String Runtime;

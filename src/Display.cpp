@@ -45,12 +45,12 @@ void printRow(int y, String title, String start_time, String end_time, String lo
   display.setCursor(5, y);
   display.setFont(&segoeuib7pt7b);
   display.print(start_time);
-  display.setCursor(70, y);
+  display.setCursor(75, y);
   display.print(title);
   display.setFont(&segoeui6pt7b);
-  display.setCursor(5, y + second_row_offset);
+  display.setCursor(8, y + second_row_offset);
   display.print(end_time);
-  display.setCursor(70, y + second_row_offset);
+  display.setCursor(75, y + second_row_offset);
   display.print(location);
 
   // pad the right side a bit
@@ -73,7 +73,7 @@ void printItems(CalendarItem* items, int totalItems) {
     // Serial.println("  Start: " + item.Start);
     // Serial.println("  End:   " + item.End);
 
-    printRow(initial_row_offset + (i * 45), item.Subject, "9:00 AM", item.Runtime, item.Location);
+    printRow(initial_row_offset + (i * 45), item.Subject, item.StartFormatted, item.Runtime, item.Location);
   }
 
   // printRow(55, "Black Hat Content Development", "9:00 AM", "10:00 AM", "Conf Room 32/25");
