@@ -6,7 +6,7 @@ class Display {
   public:
     Display();
     void init();
-    void showItems(bool);
+    void showItems(bool,String);
 
   private:
 

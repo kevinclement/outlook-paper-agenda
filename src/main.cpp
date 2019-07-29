@@ -22,8 +22,17 @@ void setup() {
   Display display = Display();
   display.init();
 
-  // ConnectionManager manager = ConnectionManager();
-  // manager.connectToWifi();
+  ConnectionManager manager = ConnectionManager();
+  manager.connectToWifi();
+  struct tm ts = manager.getTime();
+  
+  char buf[80];
+  strftime(buf, sizeof(buf), "%A, %B %d", &ts);
+  String asString(buf);
+
+  // TMP
+  printf("2: %s\n", buf);
+  printf("2: month: %d day: %d year:%d\n", ts.tm_mon + 1, ts.tm_mday, ts.tm_year + 1900);
 
   // CalendarItem* items = manager.getItems(7, 23, 2019);
   // for (int i=0; i<manager.getTotalItemCount(); i++) {
@@ -38,11 +47,11 @@ void setup() {
 
   // blink to know i'm done
   blink(2);
-  display.showItems(bootCount <= 1);
-  delay(2000);
-  display.showItems(false);
-  delay(2000);
-  display.showItems(false);
+  //display.showItems(bootCount <= 1, "Monday, July 29");
+  // delay(2000);
+  // display.showItems(false);
+  // delay(2000);
+  // display.showItems(false);
 
   // setup deep sleep and sleep the device
   // esp_sleep_enable_timer_wakeup(TIME_TO_SLEEP * uS_TO_S_FACTOR);

@@ -8,6 +8,7 @@ class ConnectionManager {
     ConnectionManager();
 
     void connectToWifi();
+    struct tm getTime();
     CalendarItem* getItems(int, int, int);
     int getTotalItemCount();
     

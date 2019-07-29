@@ -1,5 +1,7 @@
 #include <WiFi.h>
 #include <WiFiMulti.h>
+#include <WiFiUdp.h>
+#include <NTPClient.h>
 #include <HTTPClient.h>
 #include "JsonStreamingParser.h"
 #include "JsonListener.h"
@@ -9,6 +11,8 @@
 JsonStreamingParser parser;
 AgendaParser listener;
 WiFiMulti wifiMulti;
+WiFiUDP ntpUDP;
+NTPClient timeClient(ntpUDP, -25200); // Bug: daylight savings, but close enough
 
 const char* url = "https://outlook.office365.com/owa/calendar/f4afdfc98d304e2b8a58b0740090888d@microsoft.com/42c618b2217d434688e749ff0cf238c115819208843645457799/service.svc";
 
@@ -53,7 +57,15 @@ void ConnectionManager::connectToWifi() {
 
   if(wifiMulti.run() == WL_CONNECTED) {
     Serial.println("Connected to the WiFi network");
+    getTime();
   }
+}
+
+struct tm ConnectionManager::getTime() {
+  timeClient.begin();
+  timeClient.update();
+  time_t et = timeClient.getEpochTime();
+  return *localtime(&et);
 }
 
 CalendarItem* ConnectionManager::getItems(int month, int day, int year) {

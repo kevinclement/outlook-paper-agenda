@@ -2,6 +2,8 @@
 #include <GxEPD2_BW.h>
 #include <GxEPD2_3C.h>
 #include "segoeuib7pt7b.h"
+#include "segoeui9pt7b.h"
+#include "segoeuib9pt7b.h"
 #include "segoeui6pt7b.h"
 
 GxEPD2_BW<GxEPD2_420, GxEPD2_420::HEIGHT> display(GxEPD2_420(/*CS=*/ 26, /*DC=*/ 25, /*RST=*/ 21, /*BUSY=*/ 19));
@@ -74,13 +76,27 @@ void helloFullScreenPartialMode(int count)
 }
 
 int count = 0;
-void printHeader() {
+void printHeader(String day) {
     display.firstPage();
+
+    int16_t tbx, tby; uint16_t tbw, tbh;
+    display.getTextBounds("Kevin", 0, 0, &tbx, &tby, &tbw, &tbh);
+    Serial.printf("x:%d y:%d w:%d h:%d\n", tbx, tby, tbw, tbw);
+    // Kevin = 35 x 35
     do {
+        display.fillRect(0, 0, display.width(), 25, GxEPD_BLACK);
+
+        display.fillRect(0, display.height() - 25, display.width(), 25, GxEPD_BLACK);
+        display.setTextColor(GxEPD_WHITE);
         display.setCursor(5, 18);
-        display.setFont(&segoeuib7pt7b);
-        display.print("KEVIN HEADER ");
-        display.print(count);
+        display.setFont(&segoeuib9pt7b);
+        display.print(day);
+
+        // TODO: use bounding text to properly calculate based on name variable
+        // TODO: don't hardcode kevin
+        display.setFont(&segoeui9pt7b);
+        display.setCursor(display.width() - 48, 18);
+        display.print("Kevin");
     } while (display.nextPage());
 }
 
@@ -88,12 +104,10 @@ void printItems() {
     
 }
 
-void Display::showItems(bool clear) {
+void Display::showItems(bool clear, String day) {
 
   display.setRotation(1);
-  // TODO: maybe later
-  display.setPartialWindow(0, 0, display.width(), display.height());
-  //display.setFullWindow();
+  //display.setPartialWindow(0, 0, display.width(), display.height());
 
   // BUG: something is causing the first header to be printed too low so
   // I have to put this tmp stuff here so its consistent
@@ -109,18 +123,14 @@ void Display::showItems(bool clear) {
   }
 
   display.setTextColor(GxEPD_BLACK);
-  printHeader();
+
+  printHeader(day);
   printItems();
 
   count++;
 
-//    display.setFullWindow();
-//   display.firstPage();
-
 //   do
 //   {
-//     display.fillScreen(GxEPD_WHITE);
-
 //     display.setCursor(5, 18);   
 //     display.setFont(&segoeuib7pt7b);
 //     display.print("9:00 AM");
