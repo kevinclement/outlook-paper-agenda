@@ -122,6 +122,8 @@ CalendarItem* ConnectionManager::getItems(int month, int day, int year, int hour
  
     http.end(); //Free the resources
   }
+
+  return nullptr;
 }
 
 int ConnectionManager::getTotalItemCount() {

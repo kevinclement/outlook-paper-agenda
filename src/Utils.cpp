@@ -9,3 +9,9 @@ void blink(int count) {
   }
 }
 
+String prettyTime(struct tm ts) {
+  char buf[80];
+  strftime(buf, sizeof(buf), "%A, %B %d", &ts);
+  return String(buf);
+}
+

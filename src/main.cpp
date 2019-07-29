@@ -26,11 +26,6 @@ void setup() {
   manager.connectToWifi();
   struct tm ts = manager.getTime();
 
-  // TODO: move to utils
-  // char buf[80];
-  // strftime(buf, sizeof(buf), "%A, %B %d", &ts);
-  // String dayStr(buf);
-
   // CalendarItem* items = manager.getItems(
   //  ts.tm_mon + 1,
   //  ts.tm_mday,
@@ -52,7 +47,7 @@ void setup() {
   // blink to know i'm done
   blink(2);
   
-  // display.showItems(bootCount <= 1, dayStr);
+  // display.showItems(bootCount <= 1, prettyTime(ts), items, totalItems);
   //display.showItems(bootCount <= 1, "Monday, July 29", items, totalItems);
   // delay(2000);
   // display.showItems(false);
