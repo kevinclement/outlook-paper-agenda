@@ -72,25 +72,24 @@ void Display::showItems(bool clear, String day) {
 
   display.setRotation(1);
   display.setTextWrap(false);
+  display.firstPage();
   //display.setPartialWindow(0, 0, display.width(), display.height());
 
-  // BUG: something is causing the first header to be printed too low so
-  // I have to put this tmp stuff here so its consistent
-  if (clear) {
-    display.firstPage();
-    do {
-        display.fillScreen(GxEPD_WHITE);
-        display.setTextColor(GxEPD_WHITE);
-        display.setCursor(0, 0);
-        display.setFont(&segoeuib7pt7b);
-        display.print("NOOP");
-    } while (display.nextPage());
-  }
-
-  display.firstPage();
   do {
+
+    // BUG: something is causing the first header to be printed too low so
+    // I have to put this tmp stuff here so its consistent
+    if (clear) {
+      display.fillScreen(GxEPD_WHITE);
+      display.setTextColor(GxEPD_WHITE);
+      display.setCursor(0, 0);
+      display.setFont(&segoeuib7pt7b);
+      display.print("NOOP");
+    }
+
     printHeader(day);
     printItems();
+
   } while (display.nextPage());
 
   // turn it off now
