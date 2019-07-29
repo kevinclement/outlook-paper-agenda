@@ -83,19 +83,19 @@ void printHeader(String day) {
     display.getTextBounds("Kevin", 0, 0, &tbx, &tby, &tbw, &tbh);
     Serial.printf("x:%d y:%d w:%d h:%d\n", tbx, tby, tbw, tbw);
     // Kevin = 35 x 35
-    do {
-        display.fillRect(0, 0, display.width(), 25, GxEPD_BLACK);
 
-        display.fillRect(0, display.height() - 25, display.width(), 25, GxEPD_BLACK);
+    int header_height = 35;
+    do {
+        display.fillRect(0, 0, display.width(), header_height, GxEPD_BLACK);
         display.setTextColor(GxEPD_WHITE);
-        display.setCursor(5, 18);
+        display.setCursor(5, 22);
         display.setFont(&segoeuib9pt7b);
         display.print(day);
 
         // TODO: use bounding text to properly calculate based on name variable
         // TODO: don't hardcode kevin
         display.setFont(&segoeui9pt7b);
-        display.setCursor(display.width() - 48, 18);
+        display.setCursor(display.width() - 48, 22);
         display.print("Kevin");
     } while (display.nextPage());
 }
