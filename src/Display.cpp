@@ -1,4 +1,5 @@
 #include "Display.h"
+#include "CalendarItem.h"
 #include <GxEPD2_BW.h>
 #include <GxEPD2_3C.h>
 #include "segoeuib7pt7b.h"
@@ -39,7 +40,7 @@ void printHeader(String day) {
 }
 
 const unsigned int second_row_offset = 20;
-void printRow(int y, String title, String start_time, String end_time, String room) {
+void printRow(int y, String title, String start_time, String end_time, String location) {
 
   display.setCursor(5, y);
   display.setFont(&segoeuib7pt7b);
@@ -50,7 +51,7 @@ void printRow(int y, String title, String start_time, String end_time, String ro
   display.setCursor(5, y + second_row_offset);
   display.print(end_time);
   display.setCursor(70, y + second_row_offset);
-  display.print(room);
+  display.print(location);
 
   // pad the right side a bit
   // TODO: calc font height, don't use fixed value
@@ -60,15 +61,27 @@ void printRow(int y, String title, String start_time, String end_time, String ro
   // display.drawFastHLine(0, 55, 300, GxEPD_BLACK);
   // display.drawFastVLine(65, 64, 40, GxEPD_BLACK);
 }
-void printItems() {
+
+const unsigned int initial_row_offset = 55;
+void printItems(CalendarItem* items, int totalItems) {
   display.setTextColor(GxEPD_BLACK);
-  
-  printRow(55, "Black Hat Content Development", "9:00 AM", "10:00 AM", "Conf Room 32/25");
-  printRow(100, "OWA + WAC Sync", "1:00 PM", "2:00 PM", "32/3N");
-  printRow(145, "Russsi Directs Meeting", "3:00 PM", "4:00 PM", "Conf Room 32/33");
+
+  for (int i=0; i<totalItems; i++) {
+    CalendarItem item = items[i];
+
+    // Serial.println("  FB:    " + item.FreeBusy);
+    // Serial.println("  Start: " + item.Start);
+    // Serial.println("  End:   " + item.End);
+
+    printRow(initial_row_offset + (i * 45), item.Subject, "9:00 AM", "10:00 AM", item.Location);
+  }
+
+  // printRow(55, "Black Hat Content Development", "9:00 AM", "10:00 AM", "Conf Room 32/25");
+  // printRow(100, "OWA + WAC Sync", "1:00 PM", "2:00 PM", "32/3N");
+  // printRow(145, "Russsi Directs Meeting", "3:00 PM", "4:00 PM", "Conf Room 32/33");
 }
 
-void Display::showItems(bool clear, String day) {
+void Display::showItems(bool clear, String day, CalendarItem* items, int totalItems) {
 
   display.setRotation(1);
   display.setTextWrap(false);
@@ -88,7 +101,7 @@ void Display::showItems(bool clear, String day) {
     }
 
     printHeader(day);
-    printItems();
+    printItems(items, totalItems);
 
   } while (display.nextPage());
 
