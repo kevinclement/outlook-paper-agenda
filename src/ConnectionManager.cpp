@@ -7,15 +7,14 @@
 #include "JsonListener.h"
 #include "AgendaParser.h"
 #include "ConnectionManager.h"
+#include "Utils.h"
 
 JsonStreamingParser parser;
 AgendaParser listener;
 WiFiMulti wifiMulti;
 WiFiUDP ntpUDP;
 
-// NOTE: we need to subtract for PST
-//   Bug: daylight savings, could result in us losing items from query
-NTPClient timeClient(ntpUDP, -25200);
+NTPClient timeClient(ntpUDP);
 
 const char* url = "https://outlook.office365.com/owa/calendar/f4afdfc98d304e2b8a58b0740090888d@microsoft.com/42c618b2217d434688e749ff0cf238c115819208843645457799/service.svc";
 
@@ -60,7 +59,6 @@ void ConnectionManager::connectToWifi() {
 
   if(wifiMulti.run() == WL_CONNECTED) {
     Serial.println("Connected to the WiFi network");
-    getTime();
   }
 }
 
@@ -68,7 +66,12 @@ struct tm ConnectionManager::getTime() {
   timeClient.begin();
   timeClient.update();
   time_t et = timeClient.getEpochTime();
-  return *localtime(&et);
+  struct tm ts = *localtime(&et);
+
+  // subtract for PST and DST
+  uint8_t hours_to_sub = isSummer(ts) ? 7 : 8;
+  time_t newEpoc = et - (3600 * hours_to_sub);
+  return *localtime(&newEpoc);
 }
 
 CalendarItem* ConnectionManager::getItems(int month, int day, int year, int hour, int minute) {
@@ -89,6 +92,7 @@ CalendarItem* ConnectionManager::getItems(int month, int day, int year, int hour
  
     if (httpCode > 0) {
         int len = http.getSize();
+        Serial.printf("DONE\n");
         Serial.printf("  code: %d\n", httpCode);
         Serial.printf("  size: %d\n", len);
 

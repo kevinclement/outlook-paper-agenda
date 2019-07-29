@@ -26,14 +26,15 @@ void setup() {
   manager.connectToWifi();
   struct tm ts = manager.getTime();
 
-  // CalendarItem* items = manager.getItems(
-  //  ts.tm_mon + 1,
-  //  ts.tm_mday,
-  //  ts.tm_year + 1900,
-  //  ts.tm_hour,
-  //  ts.tm_min);
-  CalendarItem* items = manager.getItems(7, 29, 2019, 12, 0);
+  CalendarItem* items = manager.getItems(
+   ts.tm_mon + 1,
+   ts.tm_mday,
+   ts.tm_year + 1900,
+   ts.tm_hour,
+   ts.tm_min);
+  //CalendarItem* items = manager.getItems(7, 29, 2019, 12, 0);
   int totalItems = manager.getTotalItemCount();
+  Serial.printf("Found %d total items.\n", totalItems);
   for (int i=0; i<totalItems; i++) {
     CalendarItem item = items[i];
     Serial.println(item.Subject);
