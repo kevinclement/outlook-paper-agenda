@@ -3,3 +3,4 @@
 
 void blink(int);
 String prettyTime(struct tm);
+bool isSummer(struct tm);

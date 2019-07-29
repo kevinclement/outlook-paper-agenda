@@ -15,3 +15,34 @@ String prettyTime(struct tm ts) {
   return String(buf);
 }
 
+bool isSummer(struct tm ts)
+{
+  byte month = ts.tm_mon + 1;
+  byte day = ts.tm_mday;
+  byte hour = ts.tm_hour;
+  byte weekday = ts.tm_wday + 1;
+
+  // always false for Jan, Feb and Dec
+  if ((month < 3) || (month > 11)) return false;
+
+  // always true from Apr to Oct
+  if ((month > 3) && (month < 11)) return true;
+
+  // first sunday of current month
+  int wd = (weekday + 1);
+  uint8_t first_sunday = (7 + day - wd) % 7 + 1;
+
+  // Starts at 2:00 am on the second sunday of Mar
+  if (3 == month) {
+      if (day < 7 + first_sunday) return false;
+      if (day > 7 + first_sunday) return true;
+      return (hour > 2);
+  }
+
+  // Ends a 2:00 am on the first sunday of Nov
+  // We are only getting here if its Nov
+  if (day < first_sunday) return true;
+  if (day > first_sunday) return false;
+  return (hour < 2);
+}
+
