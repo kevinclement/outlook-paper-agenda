@@ -4,3 +4,4 @@
 void blink(int);
 String prettyTime(struct tm);
 bool isSummer(struct tm);
+double diffTime(String, String);

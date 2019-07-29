@@ -1,6 +1,7 @@
 #include "AgendaParser.h"
 #include "JsonListener.h"
 #include "CalendarItem.h"
+#include "Utils.h"
 
 String currentKey = "";
 CalendarItem items[50]; // TODO: malloc (i sux at c++)
@@ -36,6 +37,22 @@ void AgendaParser::value(String value) {
   }
   else if (currentKey == "End") {
     items[currentIndex].End = value;
+
+    double diff = diffTime(items[currentIndex].Start, value);
+    int hours = diff / 3600.0;
+    int minutes = (int)diff % 3600 / 60;
+    items[currentIndex].Runtime = "";
+    if (hours > 0) {
+      items[currentIndex].Runtime += String(hours) + "h";
+
+      if (minutes > 0) {
+        items[currentIndex].Runtime += " ";
+      }
+    }
+
+    if (minutes > 0) {
+      items[currentIndex].Runtime += String(minutes) + "m";
+    }
   }
 }
 

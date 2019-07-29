@@ -38,10 +38,12 @@ void setup() {
   for (int i=0; i<totalItems; i++) {
     CalendarItem item = items[i];
     Serial.println(item.Subject);
-    Serial.println("  LOC:   " + item.Location);
-    Serial.println("  FB:    " + item.FreeBusy);
-    Serial.println("  Start: " + item.Start);
-    Serial.println("  End:   " + item.End);
+    Serial.println("  LOC:     " + item.Location);
+    Serial.println("  FB:      " + item.FreeBusy);
+    Serial.println("  Start:   " + item.Start);
+    Serial.println("  End:     " + item.End);
+    Serial.println("  Runtime: " + item.Runtime);
+
     Serial.println();
   }
 

@@ -46,3 +46,14 @@ bool isSummer(struct tm ts)
   return (hour < 2);
 }
 
+double diffTime(String str1, String str2) {
+    struct tm tm1;
+    struct tm tm2;
+    strptime(str1.c_str(), "%Y-%m-%dT%H:%M:%S", &tm1);
+    strptime(str2.c_str(), "%Y-%m-%dT%H:%M:%S", &tm2);
+
+    time_t t1 = mktime(&tm1);
+    time_t t2 = mktime(&tm2);
+
+    return difftime(t2, t1);
+}

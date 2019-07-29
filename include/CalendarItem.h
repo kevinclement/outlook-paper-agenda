@@ -11,6 +11,7 @@ class CalendarItem {
     String Start;
     String End;
     String Location;
+    String Runtime;
 
     void reset();
 
