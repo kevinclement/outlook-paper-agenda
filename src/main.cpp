@@ -5,8 +5,7 @@
 #include "Utils.h"
 
 #define uS_TO_S_FACTOR 1000000
-// TODO: switch to 15 minutes (900)
-#define TIME_TO_SLEEP  30        /* Time ESP32 will go to sleep (in seconds) */
+#define TIME_TO_SLEEP  900        /* Time ESP32 will go to sleep (in seconds) */
 
 RTC_DATA_ATTR int bootCount = 0;
 
@@ -15,11 +14,6 @@ void setup() {
   Serial.printf("Outlook ePaper Agenda by kevinc...\n");
 
   ++bootCount;
-  
-  // String fh = formatHour(String("2019-07-29T12:10:00-07:00"));
-  // Serial.print("hour is: ");
-  // Serial.println(fh);
-  // return;
 
   pinMode(LED_BUILTIN, OUTPUT);
   blink(1);
@@ -55,17 +49,13 @@ void setup() {
 
   // blink to know i'm done
   blink(2);
-  
+
   display.showItems(bootCount <= 1, prettyTime(ts), items, totalItems);
   //display.showItems(bootCount <= 1, "Monday, July 29", items, totalItems);
-  // delay(2000);
-  // display.showItems(false);
-  // delay(2000);
-  // display.showItems(false);
 
   // setup deep sleep and sleep the device
-  // esp_sleep_enable_timer_wakeup(TIME_TO_SLEEP * uS_TO_S_FACTOR);
-  // esp_deep_sleep_start();
+  esp_sleep_enable_timer_wakeup(TIME_TO_SLEEP * uS_TO_S_FACTOR);
+  esp_deep_sleep_start();
 }
 
 void loop() {
