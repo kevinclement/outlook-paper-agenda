@@ -73,7 +73,7 @@ void printItems(CalendarItem* items, int totalItems) {
     // Serial.println("  Start: " + item.Start);
     // Serial.println("  End:   " + item.End);
 
-    printRow(initial_row_offset + (i * 45), item.Subject, "9:00 AM", "10:00 AM", item.Location);
+    printRow(initial_row_offset + (i * 45), item.Subject, "9:00 AM", item.Runtime, item.Location);
   }
 
   // printRow(55, "Black Hat Content Development", "9:00 AM", "10:00 AM", "Conf Room 32/25");

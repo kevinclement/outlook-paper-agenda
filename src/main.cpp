@@ -50,7 +50,7 @@ void setup() {
   // blink to know i'm done
   blink(2);
   
-  // display.showItems(bootCount <= 1, prettyTime(ts), items, totalItems);
+  display.showItems(bootCount <= 1, prettyTime(ts), items, totalItems);
   //display.showItems(bootCount <= 1, "Monday, July 29", items, totalItems);
   // delay(2000);
   // display.showItems(false);
