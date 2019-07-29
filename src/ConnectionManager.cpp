@@ -12,7 +12,10 @@ JsonStreamingParser parser;
 AgendaParser listener;
 WiFiMulti wifiMulti;
 WiFiUDP ntpUDP;
-NTPClient timeClient(ntpUDP, -25200); // Bug: daylight savings, but close enough
+
+// NOTE: we need to subtract for PST
+//   Bug: daylight savings, could result in us losing items from query
+NTPClient timeClient(ntpUDP, -25200);
 
 const char* url = "https://outlook.office365.com/owa/calendar/f4afdfc98d304e2b8a58b0740090888d@microsoft.com/42c618b2217d434688e749ff0cf238c115819208843645457799/service.svc";
 
@@ -68,9 +71,11 @@ struct tm ConnectionManager::getTime() {
   return *localtime(&et);
 }
 
-CalendarItem* ConnectionManager::getItems(int month, int day, int year) {
+CalendarItem* ConnectionManager::getItems(int month, int day, int year, int hour, int minute) {
   if ((WiFi.status() == WL_CONNECTED)) { //Check the current connection status
  
+    Serial.printf("Querying based on date/time: %d/%d/%d %d:%d\n", month, day, year, hour, minute);
+
     HTTPClient http;
     http.setConnectTimeout(60000);
     http.setTimeout(60000);
@@ -80,11 +85,10 @@ CalendarItem* ConnectionManager::getItems(int month, int day, int year) {
     http.addHeader("Action", "FindItem");
 
     Serial.printf("Getting items from mailbox...");
-    int httpCode = http.POST(getBody(month, day, year)); 
+    int httpCode = http.POST(getBody(month, day, year, hour, minute)); 
  
     if (httpCode > 0) {
         int len = http.getSize();
-        Serial.printf("SUCCESS!\n");
         Serial.printf("  code: %d\n", httpCode);
         Serial.printf("  size: %d\n", len);
 
@@ -124,11 +128,20 @@ int ConnectionManager::getTotalItemCount() {
   return listener.getTotalItemCount();
 }
 
-String ConnectionManager::getBody(int month, int day, int year) {
+String padNumber(int num) {
+  if (num <= 9) {
+    return String("0" + String(num));
+  }
+  else {
+    return String(num);
+  }
+}
+
+String ConnectionManager::getBody(int month, int day, int year, int hour, int minute) {
   String body = "{\"__type\":\"FindItemJsonRequest:#Exchange\",\"Header\":{\"__type\":\"JsonRequestHeaders:#Exchange\",\"RequestServerVersion\":\"Exchange2013\",\"TimeZoneContext\":{\"__type\":\"TimeZoneContext:#Exchange\",\"TimeZoneDefinition\":{\"__type\":\"TimeZoneDefinitionType:#Exchange\",\"Id\":\"Pacific Standard Time\"}}},\"Body\":{\"__type\":\"FindItemRequest:#Exchange\",\"ItemShape\":{\"__type\":\"ItemResponseShape:#Exchange\",\"BaseShape\":\"IdOnly\",\"AdditionalProperties\":[{\"__type\":\"PropertyUri:#Exchange\",\"FieldURI\":\"ItemParentId\"},{\"__type\":\"PropertyUri:#Exchange\",\"FieldURI\":\"Sensitivity\"},{\"__type\":\"PropertyUri:#Exchange\",\"FieldURI\":\"AppointmentState\"},{\"__type\":\"PropertyUri:#Exchange\",\"FieldURI\":\"IsCancelled\"},{\"__type\":\"PropertyUri:#Exchange\",\"FieldURI\":\"HasAttachments\"},{\"__type\":\"PropertyUri:#Exchange\",\"FieldURI\":\"LegacyFreeBusyStatus\"},{\"__type\":\"PropertyUri:#Exchange\",\"FieldURI\":\"CalendarItemType\"},{\"__type\":\"PropertyUri:#Exchange\",\"FieldURI\":\"Start\"},{\"__type\":\"PropertyUri:#Exchange\",\"FieldURI\":\"End\"},{\"__type\":\"PropertyUri:#Exchange\",\"FieldURI\":\"IsAllDayEvent\"},{\"__type\":\"PropertyUri:#Exchange\",\"FieldURI\":\"Organizer\"},{\"__type\":\"PropertyUri:#Exchange\",\"FieldURI\":\"Subject\"},{\"__type\":\"PropertyUri:#Exchange\",\"FieldURI\":\"IsMeeting\"},{\"__type\":\"PropertyUri:#Exchange\",\"FieldURI\":\"UID\"},{\"__type\":\"PropertyUri:#Exchange\",\"FieldURI\":\"InstanceKey\"},{\"__type\":\"PropertyUri:#Exchange\",\"FieldURI\":\"ItemEffectiveRights\"},{\"__type\":\"PropertyUri:#Exchange\",\"FieldURI\":\"JoinOnlineMeetingUrl\"},{\"__type\":\"PropertyUri:#Exchange\",\"FieldURI\":\"ConversationId\"},{\"__type\":\"PropertyUri:#Exchange\",\"FieldURI\":\"CalendarIsResponseRequested\"},{\"__type\":\"PropertyUri:#Exchange\",\"FieldURI\":\"Categories\"},{\"__type\":\"PropertyUri:#Exchange\",\"FieldURI\":\"IsRecurring\"},{\"__type\":\"PropertyUri:#Exchange\",\"FieldURI\":\"IsOrganizer\"},{\"__type\":\"PropertyUri:#Exchange\",\"FieldURI\":\"EnhancedLocation\"},{\"__type\":\"PropertyUri:#Exchange\",\"FieldURI\":\"IsSeriesCancelled\"}]},\"ParentFolderIds\":[{\"__type\":\"FolderId:#Exchange\",\"Id\":\"AAMkAGY0YWZkZmM5LThkMzAtNGUyYi04YTU4LWIwNzQwMDkwODg4ZAAuAAAAAAAinpXKstMcRIsDKoPjzoxSAQDYeirqiu/aQrXjfEsmxranAAAAj87EAAA=\",\"ChangeKey\":\"AgAAAA==\"}],\"Traversal\":\"Shallow\",\"Paging\":{\"__type\":\"CalendarPageView:#Exchange\",";
 
-  body += "\"StartDate\":\"" + String(year) + "-" + String(month) + "-" + String(day) + "T00:00:00.001\",";
-  body += "\"EndDate\":\"" + String(year) + "-" + String(month) + "-" + String(day+1) + "T00:00:00.001\",";
-   
-  return body + "}}}";  
+  body += "\"StartDate\":\"" + String(year) + "-" + padNumber(month) + "-" + padNumber(day) + "T" + padNumber(hour) + ":" + padNumber(minute) + ":00.001\",";
+  body += "\"EndDate\":\"" + String(year) + "-" + padNumber(month) + "-" + padNumber(day+1) + "T00:00:00.001\",";
+
+  return body + "}}}";
 }

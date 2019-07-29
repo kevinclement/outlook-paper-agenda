@@ -24,18 +24,20 @@ void setup() {
 
   ConnectionManager manager = ConnectionManager();
   manager.connectToWifi();
-  //struct tm ts = manager.getTime();
-  
+  struct tm ts = manager.getTime();
+
+  // TODO: move to utils
   // char buf[80];
   // strftime(buf, sizeof(buf), "%A, %B %d", &ts);
   // String dayStr(buf);
-  // int day = ts.tm_mday;
-  // int month = ts.tm_mon + 1;
-  // int year = ts.tm_year + 1900;
 
-  // Serial.printf("NTP date is %d/%d/%d\n", month, day, year);
-  // CalendarItem* items = manager.getItems(month, day, year);
-  CalendarItem* items = manager.getItems(7, 29, 2019);
+  // CalendarItem* items = manager.getItems(
+  //  ts.tm_mon + 1,
+  //  ts.tm_mday,
+  //  ts.tm_year + 1900,
+  //  ts.tm_hour,
+  //  ts.tm_min);
+  CalendarItem* items = manager.getItems(7, 29, 2019, 12, 0);
   int totalItems = manager.getTotalItemCount();
   for (int i=0; i<totalItems; i++) {
     CalendarItem item = items[i];
@@ -51,7 +53,7 @@ void setup() {
   blink(2);
   
   // display.showItems(bootCount <= 1, dayStr);
-  display.showItems(bootCount <= 1, "Monday, July 29", items, totalItems);
+  //display.showItems(bootCount <= 1, "Monday, July 29", items, totalItems);
   // delay(2000);
   // display.showItems(false);
   // delay(2000);

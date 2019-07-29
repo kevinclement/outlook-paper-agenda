@@ -9,10 +9,10 @@ class ConnectionManager {
 
     void connectToWifi();
     struct tm getTime();
-    CalendarItem* getItems(int, int, int);
+    CalendarItem* getItems(int, int, int, int, int);
     int getTotalItemCount();
     
   private:
-    String getBody(int, int, int);
+    String getBody(int, int, int, int, int);
 
 };
