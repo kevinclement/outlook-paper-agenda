@@ -57,9 +57,13 @@ ConnectionManager::ConnectionManager() {
 void ConnectionManager::connectToWifi() {
   Serial.println("Connecting Wifi...");
 
-  if(wifiMulti.run() == WL_CONNECTED) {
-    Serial.println("Connected to the WiFi network");
+  wifiMulti.run();
+  uint8_t status = WiFi.status();
+  while (WiFi.status() != WL_CONNECTED) {
+        delay(500);
+        Serial.print(".");
   }
+  Serial.println("Connected to the Wifi network");
 }
 
 struct tm ConnectionManager::getTime() {

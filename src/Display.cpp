@@ -81,7 +81,7 @@ void printFooter(String lastUpdate, String battery) {
   display.setFont(&segoeui6pt7b);
   display.setCursor(5, display.height() - 5);
   display.print(lastUpdate);
-  display.setCursor(display.width() - 25, display.height() - 5);
+  display.setCursor(display.width() - 55, display.height() - 5);
   display.print(battery);
 }
 

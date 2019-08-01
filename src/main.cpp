@@ -50,8 +50,7 @@ void setup() {
   // blink to know i'm done
   blink(2);
 
-  display.showItems(bootCount <= 1, prettyTime(ts), items, totalItems, prettyTimeLong(ts), "81%");
-  //display.showItems(bootCount <= 1, "Monday, July 29", items, totalItems);
+  display.showItems(bootCount <= 1, prettyTime(ts), items, totalItems, prettyTimeLong(ts), getBatteryPercentage());
 
   // setup deep sleep and sleep the device
   esp_sleep_enable_timer_wakeup(TIME_TO_SLEEP * uS_TO_S_FACTOR);
@@ -59,14 +58,4 @@ void setup() {
 }
 
 void loop() {
-
-  // float raw = analogRead(A13);
-  // float bat = (raw / 4095) * 2.0 * 3.3 * 1.1;
-
-  // Serial.print("bat is: ");
-  // Serial.println(bat);
-  // digitalWrite(LED_BUILTIN, HIGH);   // turn the LED on (HIGH is the voltage level)
-  // delay(5000);                       // wait for a second
-  // digitalWrite(LED_BUILTIN, LOW);    // turn the LED off by making the voltage LOW
-  // delay(5000);                       // wait for a second
 }

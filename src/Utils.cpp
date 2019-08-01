@@ -21,6 +21,22 @@ String prettyTimeLong(struct tm ts) {
   return String(buf);
 }
 
+String getBatteryPercentage() {
+  float raw = analogRead(A13);
+  float bat = (raw / 4095) * 2.0 * 3.3 * 1.1;
+  int perc = (bat / 4.27) * 100;
+
+  // > 4 means plugged in?
+  // bat is 4.27
+
+  Serial.print("bat is: ");
+  Serial.println(bat);
+  Serial.print("perc is: ");
+  Serial.println(perc);
+
+  return String(bat) + " : " + String(perc) + "%";
+}
+
 bool isSummer(struct tm ts)
 {
   byte month = ts.tm_mon + 1;
