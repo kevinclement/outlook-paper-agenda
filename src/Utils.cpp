@@ -58,6 +58,18 @@ double diffTime(String str1, String str2) {
     return difftime(t2, t1);
 }
 
+struct tm calcTomorrow(int month, int day, int year) {
+    struct tm tomorrow;
+
+    tomorrow.tm_mon = month;
+    tomorrow.tm_mday = day + 1;
+    tomorrow.tm_year = year;
+
+    mktime(&tomorrow);
+
+    return tomorrow;
+}
+
 // its late i know
 String formatHour(String str1) {
   String fm = "";
