@@ -50,7 +50,7 @@ void setup() {
   // blink to know i'm done
   blink(2);
 
-  display.showItems(bootCount <= 1, prettyTime(ts), items, totalItems, "7/31/2019 5:49 PM", "81%");
+  display.showItems(bootCount <= 1, prettyTime(ts), items, totalItems, prettyTimeLong(ts), "81%");
   //display.showItems(bootCount <= 1, "Monday, July 29", items, totalItems);
 
   // setup deep sleep and sleep the device

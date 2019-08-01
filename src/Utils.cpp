@@ -15,6 +15,12 @@ String prettyTime(struct tm ts) {
   return String(buf);
 }
 
+String prettyTimeLong(struct tm ts) {
+  char buf[80];
+  strftime(buf, sizeof(buf), "%D %r", &ts);
+  return String(buf);
+}
+
 bool isSummer(struct tm ts)
 {
   byte month = ts.tm_mon + 1;
