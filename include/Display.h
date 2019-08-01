@@ -7,7 +7,7 @@ class Display {
   public:
     Display();
     void init();
-    void showItems(bool,String,CalendarItem*,int);
+    void showItems(bool,String,CalendarItem*,int,String,String);
 
   private:
 

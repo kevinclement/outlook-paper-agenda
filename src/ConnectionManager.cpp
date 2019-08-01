@@ -64,7 +64,10 @@ void ConnectionManager::connectToWifi() {
 
 struct tm ConnectionManager::getTime() {
   timeClient.begin();
-  timeClient.update();
+  while(!timeClient.update()) {
+    Serial.println("WARN: didn't get time, forcing again");
+    timeClient.forceUpdate();
+  }
   time_t et = timeClient.getEpochTime();
   struct tm ts = *localtime(&et);
 
@@ -108,7 +111,7 @@ CalendarItem* ConnectionManager::getItems(int month, int day, int year, int hour
           if(size) {
             int c = stream->readBytes(buff, ((size > sizeof(buff)) ? sizeof(buff) : size));
             for(int i = 0; i<c; i++) {
-              parser.parse(buff[i]); 
+              parser.parse(buff[i]);
             }
 
             if(len > 0) {
@@ -149,7 +152,7 @@ String ConnectionManager::getBody(int month, int day, int year, int hour, int mi
   struct tm tomorrow = calcTomorrow(month, day, year);
 
   body += "\"StartDate\":\"" + String(year) + "-" + padNumber(month) + "-" + padNumber(day) + "T" + padNumber(hour) + ":" + padNumber(minute) + ":00.001\",";
-  body += "\"EndDate\":\"" + String(tomorrow.tm_year) + "-" + padNumber(tomorrow.tm_mon) + "-" + padNumber(tomorrow.tm_mday) + "T00:00:00.001\",";
+  body += "\"EndDate\":\"" + String(tomorrow.tm_year + 1900) + "-" + padNumber(tomorrow.tm_mon + 1) + "-" + padNumber(tomorrow.tm_mday) + "T00:00:00.001\",";  
 
   return body + "}}}";
 }

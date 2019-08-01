@@ -75,13 +75,17 @@ void printItems(CalendarItem* items, int totalItems) {
 
     printRow(initial_row_offset + (i * 45), item.Subject, item.StartFormatted, item.Runtime, item.Location);
   }
-
-  // printRow(55, "Black Hat Content Development", "9:00 AM", "10:00 AM", "Conf Room 32/25");
-  // printRow(100, "OWA + WAC Sync", "1:00 PM", "2:00 PM", "32/3N");
-  // printRow(145, "Russsi Directs Meeting", "3:00 PM", "4:00 PM", "Conf Room 32/33");
 }
 
-void Display::showItems(bool clear, String day, CalendarItem* items, int totalItems) {
+void printFooter(String lastUpdate, String battery) {
+  display.setFont(&segoeui6pt7b);
+  display.setCursor(5, display.height() - 5);
+  display.print(lastUpdate);
+  display.setCursor(display.width() - 25, display.height() - 5);
+  display.print(battery);
+}
+
+void Display::showItems(bool clear, String day, CalendarItem* items, int totalItems, String lastUpdate, String battery) {
 
   display.setRotation(1);
   display.setTextWrap(false);
@@ -102,6 +106,7 @@ void Display::showItems(bool clear, String day, CalendarItem* items, int totalIt
 
     printHeader(day);
     printItems(items, totalItems);
+    printFooter(lastUpdate, battery);
 
   } while (display.nextPage());
 
