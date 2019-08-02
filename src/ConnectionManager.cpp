@@ -51,14 +51,13 @@ const char* root_ca= \
 ConnectionManager::ConnectionManager() {
   wifiMulti.addAP("clement", "4258025345");
   wifiMulti.addAP("Kevin", "henry123");
-  wifiMulti.addAP("MSFTOPEN", "");
+  wifiMulti.addAP("MSFTGUEST", "");
 }
 
 void ConnectionManager::connectToWifi() {
   Serial.println("Connecting Wifi...");
 
   wifiMulti.run();
-  uint8_t status = WiFi.status();
   while (WiFi.status() != WL_CONNECTED) {
         delay(500);
         Serial.print(".");

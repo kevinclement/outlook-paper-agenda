@@ -82,8 +82,6 @@ double diffTime(String str1, String str2) {
 
 struct tm calcTomorrow(int month, int day, int year) {
     struct tm t;
-
-    time_t t_of_day;
     t.tm_year = year-1900;
     t.tm_mon = month - 1;
     t.tm_mday = day + 1;
@@ -91,7 +89,7 @@ struct tm calcTomorrow(int month, int day, int year) {
     t.tm_min = 0;
     t.tm_sec = 0;
     t.tm_isdst = -1;
-    t_of_day = mktime(&t);
+    mktime(&t);
 
     return t;
 }
